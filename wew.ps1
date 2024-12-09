@@ -14,13 +14,12 @@ $Register_cron = Read-Host "Register a job?
 2) No
 "
 function Nekobox_files_download {
-    $remote_custom_line = curl https://raw.githubusercontent.com/Akiyamov/nekobox_conf/refs/heads/main/$geoip_name.json | Select-Object -Expand Content
-    $custom_line = Get-Content "$Nekobox_dir\config\routes_box\Default" | Select-String custom | Select-Object -ExpandProperty Line
-    $content = Get-Content "$Nekobox_dir\config\routes_box\Default"
-    $content | ForEach-Object {$_ -replace $custom_line,"$remote_custom_line"} | Set-Content "$Nekobox_dir\config\routes_box\Default"
-    $def_outbound = Get-Content "$Nekobox_dir\config\routes_box\Default" | Select-String def_outbound | Select-Object -ExpandProperty Line
-    $content = Get-Content "$Nekobox_dir\config\routes_box\Default"
-    $content | ForEach-Object {$_ -replace $def_outbound,'    "def_outbound": "bypass",'} | Set-Content "$Nekobox_dir\config\routes_box\Default"
+    wget https://raw.githubusercontent.com/Akiyamov/nekobox_conf/refs/heads/main/$geoip_name.json -OutFile "$Nekobox_dir\tmp_file.json"
+    $neko_json_new = Get-Content "$Nekobox_dir\tmp_file.json" -raw | ConvertFrom-Json
+    $neko_json = Get-Content "$Nekobox_dir\config\routes_box\Default" -raw | ConvertFrom-Json
+    $neko_json.def_outbound | % {$_="bypass"}
+    $neko_json.custom | % {$_=$neko_json_new}
+    $neko_json | ConvertTo-Json -depth 32| set-content "$Nekobox_dir\config\routes_box\Default"
     wget "https://github.com/$geoip_name/releases/latest/download/geoip.db" -OutFile "$Nekobox_dir\geoip.db"
     wget "https://github.com/$geoip_name/releases/latest/download/geosite.db" -OutFile "$Nekobox_dir\geosite.db"
 }

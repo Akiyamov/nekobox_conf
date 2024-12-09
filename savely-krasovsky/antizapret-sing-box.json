@@ -1,4 +1,4 @@
-"custom": "{
+{
     "rules": [
         {
             "outbound": "dns-out",
@@ -68,4 +68,4 @@
             "outbound": "proxy"
         }
     ]
-}",
+}
