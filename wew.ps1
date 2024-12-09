@@ -29,6 +29,8 @@ switch ($Nekobox_geofile) {
         $geoip_name = "savely-krasovsky/antizapret-sing-box"
         Nekobox_files_download
         if ( $Register_cron -eq 1 ) {
+            [System.Environment]::SetEnvironmentVariable('ResourceGroup','Nekobox_dir', $Nekobox_dir)
+            [System.Environment]::SetEnvironmentVariable('ResourceGroup','geoip_name', $geoip_name)
             $action = New-ScheduledTaskAction -Execute Nekobox_files_download 
             $trigger = New-ScheduledTaskTrigger -AtLogon
             $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -DontStopOnIdleEnd -StartWhenAvailable
@@ -40,6 +42,8 @@ switch ($Nekobox_geofile) {
         $geoip_name = "1andrevich/Re-filter-lists"
         Nekobox_files_download
         if ( $Register_cron -eq 1 ) {
+            [System.Environment]::SetEnvironmentVariable('ResourceGroup','Nekobox_dir', $Nekobox_dir)
+            [System.Environment]::SetEnvironmentVariable('ResourceGroup','geoip_name', $geoip_name)
             $action = New-ScheduledTaskAction -Execute Nekobox_files_download 
             $trigger = New-ScheduledTaskTrigger -AtLogon
             $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -DontStopOnIdleEnd -StartWhenAvailable
