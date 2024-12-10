@@ -8,6 +8,15 @@ $Nekobox_geofile = Read-Host "Enter which geoip/geosite you want to use. 1 or 2
 1) Antizapret
 2) Re:filter
 "
+$Discord_geofile = Read-Host "Do you want to add discord IP cidr?
+1) Yes
+2) No
+"
+if ( $Discord_geofile -eq 1 ){
+    $Discord_filename = "discord"
+} else {
+    $Discord_filename = "clear"
+}
 $Register_cron = Read-Host "Register a job?
 1) Yes
 2) No
@@ -35,11 +44,11 @@ function Nekobox_schedule {
 }
 switch ($Nekobox_geofile) {
     1 {
-        $geoip_name = "savely-krasovsky/antizapret-sing-box"
+        $geoip_name = "savely-krasovsky/antizapret-sing-box_$Discord_filename"
         Nekobox_files_download
     }
     2 {
-        $geoip_name = "1andrevich/Re-filter-lists"
+        $geoip_name = "1andrevich/Re-filter-lists_$Discord_filename"
         Nekobox_files_download
     }
 }
