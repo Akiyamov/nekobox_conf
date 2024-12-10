@@ -29,7 +29,7 @@ function Nekobox_schedule {
     [System.Environment]::SetEnvironmentVariable('Nekobox_dir',$Nekobox_dir, 'User')
     [System.Environment]::SetEnvironmentVariable('geoip_name',$geoip_name, 'User')
     wget "https://raw.githubusercontent.com/Akiyamov/nekobox_conf/refs/heads/main/scheduled_task.ps1"-OutFile "$env:USERPROFILE\scheduled_task.ps1"
-    $action = New-ScheduledTaskAction -Execute "$env:USERPROFILE\scheduled_task.ps1" 
+    $action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "$env:USERPROFILE\scheduled_task.ps1" 
     $trigger = New-ScheduledTaskTrigger -AtLogon
     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -DontStopOnIdleEnd -StartWhenAvailable
     $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive
