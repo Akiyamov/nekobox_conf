@@ -23,7 +23,7 @@ $Register_cron = Read-Host "Register a job?
 "
 wget "https://raw.githubusercontent.com/Akiyamov/nekobox_conf/refs/heads/main/Default" -OutFile "$Nekobox_dir\config\routes_box\Default"
 function Nekobox_files_download {
-    wget https://raw.githubusercontent.com/Akiyamov/nekobox_conf/refs/heads/main/$geoip_name.json -OutFile "$Nekobox_dir\tmp_file.json"
+    wget https://raw.githubusercontent.com/Akiyamov/nekobox_conf/refs/heads/main/$geoip_name_discord.json -OutFile "$Nekobox_dir\tmp_file.json"
     $neko_json_new = Get-Content "$Nekobox_dir\tmp_file.json" -raw 
     $neko_json = Get-Content "$Nekobox_dir\config\routes_box\Default" -raw | ConvertFrom-Json
     $neko_json.def_outbound = "bypass" 
@@ -35,7 +35,7 @@ function Nekobox_files_download {
 }
 function Nekobox_schedule {
     Import-Module ScheduledTasks
-    wget "https://raw.githubusercontent.com/Akiyamov/nekobox_conf/refs/heads/main/scheduled_task.ps1"-OutFile "$env:USERPROFILE\scheduled_task.ps1 $Nekobox_dir $geoip_name"
+    wget "https://raw.githubusercontent.com/Akiyamov/nekobox_conf/refs/heads/main/scheduled_task.ps1"-OutFile "$env:USERPROFILE\scheduled_task.ps1 $Nekobox_dir $geoip_name $geoip_name_discord"
     $action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "$env:USERPROFILE\scheduled_task.ps1" 
     $trigger = New-ScheduledTaskTrigger -AtLogon
     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -DontStopOnIdleEnd -StartWhenAvailable
@@ -44,11 +44,13 @@ function Nekobox_schedule {
 }
 switch ($Nekobox_geofile) {
     1 {
-        $geoip_name = "savely-krasovsky/antizapret-sing-box_$Discord_filename"
+        $geoip_name = "savely-krasovsky/antizapret-sing-box"
+        $geoip_name_discord = "savely-krasovsky/antizapret-sing-box_$Discord_filename"
         Nekobox_files_download
     }
     2 {
-        $geoip_name = "1andrevich/Re-filter-lists_$Discord_filename"
+        $geoip_name = "1andrevich/Re-filter-lists"
+        $geoip_name_discord = "1andrevich/Re-filter-lists_$Discord_filename"
         Nekobox_files_download
     }
 }
