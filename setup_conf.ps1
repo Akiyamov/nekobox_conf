@@ -26,9 +26,7 @@ function Nekobox_files_download {
 }
 function Nekobox_schedule {
     Import-Module ScheduledTasks
-    [System.Environment]::SetEnvironmentVariable('Nekobox_dir',$Nekobox_dir, 'User')
-    [System.Environment]::SetEnvironmentVariable('geoip_name',$geoip_name, 'User')
-    wget "https://raw.githubusercontent.com/Akiyamov/nekobox_conf/refs/heads/main/scheduled_task.ps1"-OutFile "$env:USERPROFILE\scheduled_task.ps1"
+    wget "https://raw.githubusercontent.com/Akiyamov/nekobox_conf/refs/heads/main/scheduled_task.ps1"-OutFile "$env:USERPROFILE\scheduled_task.ps1 $Nekobox_dir $geoip_name"
     $action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "$env:USERPROFILE\scheduled_task.ps1" 
     $trigger = New-ScheduledTaskTrigger -AtLogon
     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -DontStopOnIdleEnd -StartWhenAvailable
