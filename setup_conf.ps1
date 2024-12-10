@@ -1,11 +1,10 @@
-Import-Module ScheduledTasks
 $Nekobox_dir = Read-Host "Enter path to directory with Nekobox"
 $Nekobox_dir.TrimEnd('\')
 if (!(Test-Path "$Nekobox_dir\nekobox.exe")) {
     Write-Warning "Wrong path to Nekobox."
     [Environment]::Exit(0)
 }
-$Nekobox_geofile = Read-Host "Enter which geoip/geosite you want to use. 1 or 2.:
+$Nekobox_geofile = Read-Host "Enter which geoip/geosite you want to use. 1 or 2
 1) Antizapret
 2) Re:filter
 "
@@ -26,6 +25,7 @@ function Nekobox_files_download {
     wget "https://github.com/$geoip_name/releases/latest/download/geosite.db" -OutFile "$Nekobox_dir\geosite.db"
 }
 function Nekobox_schedule {
+    Import-Module ScheduledTasks
     [System.Environment]::SetEnvironmentVariable('Nekobox_dir',$Nekobox_dir, 'User')
     [System.Environment]::SetEnvironmentVariable('geoip_name',$geoip_name, 'User')
     $action = New-ScheduledTaskAction -Execute Nekobox_files_download 
