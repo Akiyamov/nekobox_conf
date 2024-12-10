@@ -1,0 +1,12 @@
+{
+    "custom": "",
+    "def_outbound": "bypass",
+    "direct_dns": "https://1.1.1.1/dns-query",
+    "dns_final_out": "proxy",
+    "dns_routing": true,
+    "domain_strategy": "ipv4_only",
+    "outbound_domain_strategy": "ipv4_only",
+    "remote_dns": "https://1.1.1.1/dns-query",
+    "sniffing_mode": 1,
+    "use_dns_object": false
+}
