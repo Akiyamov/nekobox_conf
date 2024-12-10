@@ -3,7 +3,7 @@ $Nekobox_dir = Read-Host "Enter path to directory with Nekobox"
 $Nekobox_dir.TrimEnd('\')
 if (!(Test-Path "$Nekobox_dir\nekobox.exe")) {
     Write-Warning "Wrong path to Nekobox."
-    [Environment]::Exit(1)
+    [Environment]::Exit(0)
 }
 $Nekobox_geofile = Read-Host "Enter which geoip/geosite you want to use. 1 or 2.:
 1) Antizapret
@@ -14,19 +14,18 @@ $Register_cron = Read-Host "Register a job?
 2) No
 "
 function Nekobox_files_download {
-    wget https://raw.githubusercontent.com/Akiyamov/nekobox_conf/refs/heads/main/$geoip_name.json -OutFile "$Nekobox_dir\config\routes_box\Default"
-#    wget https://raw.githubusercontent.com/Akiyamov/nekobox_conf/refs/heads/main/$geoip_name.json -OutFile "$Nekobox_dir\tmp_file.json"
-#    $neko_json_new = Get-Content "$Nekobox_dir\tmp_file.json" -raw 
-#    $neko_json = Get-Content "$Nekobox_dir\config\routes_box\Default" -raw | ConvertFrom-Json
-#    $neko_json.def_outbound = "bypass" 
-#    $neko_json.custom = $neko_json_new
-#    $neko_json | ConvertTo-Json | set-content "$Nekobox_dir\config\routes_box\Default"
+    $neko_json_new = Get-Content "$Nekobox_dir\tmp_file.json" -raw 
+    $neko_json = Get-Content "$Nekobox_dir\config\routes_box\Default" -raw | ConvertFrom-Json
+    $neko_json.def_outbound = "bypass" 
+    $neko_json.custom = "$neko_json_new"
+    $neko_jsonified = $neko_json | ConvertTo-Json
+    $neko_jsonified.Replace('\\\', '\') | set-content "$Nekobox_dir\config\routes_box\Default"
     wget "https://github.com/$geoip_name/releases/latest/download/geoip.db" -OutFile "$Nekobox_dir\geoip.db"
     wget "https://github.com/$geoip_name/releases/latest/download/geosite.db" -OutFile "$Nekobox_dir\geosite.db"
 }
 function Nekobox_schedule {
-    [System.Environment]::SetEnvironmentVariable('ResourceGroup','Nekobox_dir', $Nekobox_dir)
-    [System.Environment]::SetEnvironmentVariable('ResourceGroup','geoip_name', $geoip_name)
+    [System.Environment]::SetEnvironmentVariable('Nekobox_dir',$Nekobox_dir, 'User')
+    [System.Environment]::SetEnvironmentVariable('geoip_name',$geoip_name, 'User')
     $action = New-ScheduledTaskAction -Execute Nekobox_files_download 
     $trigger = New-ScheduledTaskTrigger -AtLogon
     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -DontStopOnIdleEnd -StartWhenAvailable
