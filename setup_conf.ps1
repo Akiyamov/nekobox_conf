@@ -14,7 +14,7 @@ $Register_cron = Read-Host "Register a job?
 2) No
 "
 function Nekobox_files_download {
-    wget https://raw.githubusercontent.com/Akiyamov/nekobox_conf/refs/heads/main/$geoip_name.json
+    wget https://raw.githubusercontent.com/Akiyamov/nekobox_conf/refs/heads/main/$geoip_name.json -OutFile "$Nekobox_dir\tmp_file.json"
     $neko_json_new = Get-Content "$Nekobox_dir\tmp_file.json" -raw 
     $neko_json = Get-Content "$Nekobox_dir\config\routes_box\Default" -raw | ConvertFrom-Json
     $neko_json.def_outbound = "bypass" 
