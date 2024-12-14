@@ -36,11 +36,16 @@ function Nekobox_files_download {
 function Nekobox_schedule {
     Import-Module ScheduledTasks
     wget "https://raw.githubusercontent.com/Akiyamov/nekobox_conf/refs/heads/main/scheduled_task.ps1" -OutFile "$env:USERPROFILE\scheduled_task.ps1"
-    $action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "$env:USERPROFILE\scheduled_task.ps1 $Nekobox_dir $geoip_name $geoip_name_discord" 
+    $taskExists = Get-ScheduledTask | Where-Object {$_.TaskName -like "Nekobox route config" }
+    $action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "$env:USERPROFILE\scheduled_task.ps1 $Nekobox_dir $geoip_name $geoip_name_discord -WindowStyle hidden" 
     $trigger = New-ScheduledTaskTrigger -AtLogon
     $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -DontStopOnIdleEnd -StartWhenAvailable
     $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive
-    Register-ScheduledTask -TaskName "Nekobox route config" -Action $action -Trigger $trigger -Settings $settings -Description "Download sing-box files on startup" -Principal $principal
+    if($taskExists){
+        Set-ScheduledTask -TaskName "Nekobox route config" -Action $action -Trigger $trigger -Settings $settings -Description "Download sing-box files on startup" -Principal $principal
+    } else {
+        Register-ScheduledTask -TaskName "Nekobox route config" -Action $action -Trigger $trigger -Settings $settings -Description "Download sing-box files on startup" -Principal $principal
+    }
 }
 switch ($Nekobox_geofile) {
     1 {
