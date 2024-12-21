@@ -1,1 +1,1 @@
-{\"rules\":[{\"outbound\":\"dns-out\",\"protocol\":\"dns\"},{\"geoip\":\"refilter_ipsum\",\"geosite\":\"refilter_domains\",\"outbound\":\"proxy\"}]}
+{\"rules\":[{\"outbound\":\"dns-out\",\"protocol\":\"dns\"},{\"geoip\":\"refilter_ipsum\",\"geosite\":\"refilter_domains\",\"outbound\":\"proxy\"},{\"domain_suffix\":[\"signal.art\",\"signal.org\",\"signalusers.org\"],\"outbound\":\"proxy\"}]}
